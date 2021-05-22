@@ -181,6 +181,15 @@ class Header extends Component {
         this.setState({ contact: e.target.value });
     }
 
+    logoutHandler = (e) => {
+        sessionStorage.removeItem("uuid");
+        sessionStorage.removeItem("access-token");
+
+        this.setState({
+            loggedIn: false
+        });
+    }
+
     render() {
         const styles = {
             color:'white',
@@ -204,12 +213,19 @@ class Header extends Component {
                             )
                         }}
                     />
-                    <div className="login-button">
-                        <Button variant="contained" color="default" onClick={this.openModalHandler}>
-                            <AccountCircleIcon/>
-                            Login
-                        </Button>
-                    </div>
+                    {!this.state.loggedIn ?
+                        <div className="login-button">
+                            <Button variant="contained" color="default" onClick={this.openModalHandler}>
+                                Login
+                            </Button>
+                        </div>
+                        :
+                        <div className="login-button">
+                            <Button variant="contained" color="default" onClick={this.logoutHandler}>
+                                Logout
+                            </Button>
+                        </div>
+                    }
                 </header>
                 <Modal
                     ariaHideApp={false}
