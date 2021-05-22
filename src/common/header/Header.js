@@ -41,6 +41,7 @@ class Header extends Component {
             modalIsOpen: false,
             value: 0,
             contactnoRequired: "dispNone",
+            invalidContactNumber: "dispNone",
             contactno: "",
             passwordRequired: "dispNone",
             password: "",
@@ -64,6 +65,7 @@ class Header extends Component {
             modalIsOpen: true,
             value: 0,
             contactnoRequired: "dispNone",
+            invalidContactNumber: "dispNone",
             contactno: "",
             passwordRequired: "dispNone",
             password: "",
@@ -92,8 +94,10 @@ class Header extends Component {
 
 
     loginClickHandler = () => {
+        const phoneno = /^\d{10}$/;
         this.state.contactno === "" ? this.setState({ contactnoRequired: "dispBlock" }) : this.setState({ contactnoRequired: "dispNone" });
         this.state.loginPassword === "" ? this.setState({ loginPasswordRequired: "dispBlock" }) : this.setState({ loginPasswordRequired: "dispNone" });
+        this.state.contactno.match(phoneno) ? this.setState({ invalidContactNumber: "dispNone" }) : this.setState({ invalidContactNumber: "dispBlock" });
     }
 
     inputContactNoChangeHandler = (e) => {
@@ -187,6 +191,9 @@ class Header extends Component {
                             <Input id="loginPassword" type="password" loginpassword={this.state.loginPassword} onChange={this.inputLoginPasswordChangeHandler} />
                             <FormHelperText className={this.state.loginPasswordRequired}>
                                 <span className="red">required</span>
+                            </FormHelperText>
+                            <FormHelperText className={this.state.invalidContactNumber}>
+                                <span className="red">Invalid Contact</span>
                             </FormHelperText>
                         </FormControl>
                         <br/><br/>
