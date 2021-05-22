@@ -7,6 +7,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import {FormControl, IconButton, Input, InputAdornment, InputLabel, Tab, Tabs, TextField} from "@material-ui/core";
 import Modal from 'react-modal';
 import Typography from '@material-ui/core/Typography';
+import PropTypes from 'prop-types';
 
 const customStyles = {
     content: {
@@ -26,6 +27,10 @@ const TabContainer = function (props) {
         </Typography>
     )
 };
+
+TabContainer.propTypes = {
+    children: PropTypes.node.isRequired
+}
 
 class Header extends Component {
 
@@ -90,18 +95,20 @@ class Header extends Component {
                         <Tab label="Login" />
                         <Tab label="Register" />
                     </Tabs>
+                    {this.state.value === 0 &&
                     <TabContainer>
                         <FormControl required>
                             <InputLabel htmlFor="contactno">Contact No</InputLabel>
-                            <Input id="contactno" type="text" />
+                            <Input id="contactno" type="text"/>
                         </FormControl>
                         <br/><br/>
                         <FormControl required>
                             <InputLabel htmlFor="password">Password</InputLabel>
-                            <Input id="password" type="password" />
+                            <Input id="password" type="password"/>
                         </FormControl>
                         <br/><br/>
                     </TabContainer>
+                    }
                 </Modal>
             </div>
         )
