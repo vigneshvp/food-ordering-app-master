@@ -52,6 +52,7 @@ class Header extends Component {
             lastnameRequired: "dispNone",
             lastname: "",
             emailRequired: "dispNone",
+            invalidEmail: "dispNone",
             email: "",
             registerPasswordRequired: "dispNone",
             registerPassword: "",
@@ -99,7 +100,7 @@ class Header extends Component {
         const phoneno = /^\d{10}$/;
         this.state.contactno === "" ? this.setState({ contactnoRequired: "dispBlock" }) : this.setState({ contactnoRequired: "dispNone" });
         this.state.loginPassword === "" ? this.setState({ loginPasswordRequired: "dispBlock" }) : this.setState({ loginPasswordRequired: "dispNone" });
-        this.state.contactno.match(phoneno) ? this.setState({ invalidContactNumber: "dispNone" }) : this.setState({ invalidContactNumber: "dispBlock" });
+        this.state.contactno !== ""  && !this.state.contactno.match(phoneno) ? this.setState({ invalidContactNumber: "dispBlock" }) : this.setState({ invalidContactNumber: "dispNone" });
         let dataLogin = null;
         let xhrLogin = new XMLHttpRequest();
         let that = this;
@@ -116,7 +117,7 @@ class Header extends Component {
             }
         });
 
-        xhrLogin.open("POST", this.props.baseUrl + "/login");
+        xhrLogin.open("POST", this.props.baseUrl + "customer/login");
         xhrLogin.setRequestHeader("Authorization", "Basic " + window.btoa(this.state.contactno + ":" + this.state.loginPassword));
         xhrLogin.setRequestHeader("Content-Type", "application/json");
         xhrLogin.setRequestHeader("Cache-Control", "no-cache");
@@ -132,9 +133,11 @@ class Header extends Component {
     }
 
     registerClickHandler = () => {
+        const mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
         this.state.firstname === "" ? this.setState({ firstnameRequired: "dispBlock" }) : this.setState({ firstnameRequired: "dispNone" });
         this.state.lastname === "" ? this.setState({ lastnameRequired: "dispBlock" }) : this.setState({ lastnameRequired: "dispNone" });
         this.state.email === "" ? this.setState({ emailRequired: "dispBlock" }) : this.setState({ emailRequired: "dispNone" });
+        this.state.email !== ""  && !this.state.email.match(mailformat)? this.setState({ invalidEmail: "dispBlock" }) : this.setState({ invalidEmail: "dispNone" });
         this.state.registerPassword === "" ? this.setState({ registerPasswordRequired: "dispBlock" }) : this.setState({ registerPasswordRequired: "dispNone" });
         this.state.contact === "" ? this.setState({ contactRequired: "dispBlock" }) : this.setState({ contactRequired: "dispNone" });
         let dataSignup = JSON.stringify({
@@ -155,7 +158,7 @@ class Header extends Component {
             }
         });
 
-        xhrSignup.open("POST", this.props.baseUrl + "signup");
+        xhrSignup.open("POST", this.props.baseUrl + "customer/signup");
         xhrSignup.setRequestHeader("Content-Type", "application/json");
         xhrSignup.setRequestHeader("Cache-Control", "no-cache");
         xhrSignup.send(dataSignup);
@@ -273,13 +276,10 @@ class Header extends Component {
                             </FormHelperText>
                         </FormControl>
                         <br/><br/>
-                        <FormControl required>
+                        <FormControl>
                             <InputLabel htmlFor="lastname">Last Name</InputLabel>
                             <Input id="lastname" type="text" lastname={this.state.lastname}
                                    onChange={this.inputLastNameChangeHandler}/>
-                            <FormHelperText className={this.state.lastnameRequired}>
-                                <span className="red">required</span>
-                            </FormHelperText>
                         </FormControl>
                         <br/><br/>
                         <FormControl required>
@@ -288,6 +288,9 @@ class Header extends Component {
                                    onChange={this.inputEmailChangeHandler}/>
                             <FormHelperText className={this.state.emailRequired}>
                                 <span className="red">required</span>
+                            </FormHelperText>
+                            <FormHelperText className={this.state.invalidEmail}>
+                                <span className="red">Invalid Email</span>
                             </FormHelperText>
                         </FormControl>
                         <br/><br/>
@@ -308,14 +311,6 @@ class Header extends Component {
                                 <span className="red">required</span>
                             </FormHelperText>
                         </FormControl>
-                        <br/><br/>
-                        {this.state.registrationSuccess === true &&
-                        <FormControl>
-                                    <span className="successText">
-                                        Registration Successful. Please Login!
-                                      </span>
-                        </FormControl>
-                        }
                         <br /><br />
                         <Button variant="contained" color="primary"
                                 onClick={this.registerClickHandler}>REGISTER</Button>

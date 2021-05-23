@@ -9,6 +9,7 @@
     "react": "^17.0.2",
     "react-dom": "^16.14.0",
     "react-modal": "^3.13.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "2.0.4",
     "typeface-roboto": "^1.1.13"
   },
