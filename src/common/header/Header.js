@@ -56,8 +56,10 @@ class Header extends Component {
             email: "",
             registerPasswordRequired: "dispNone",
             registerPassword: "",
+            invalidPassword: "dispNone",
             contactRequired: "dispNone",
             contact: "",
+            invalidContactRequired: "dispNone",
             registrationSuccess: false,
             loggedIn: sessionStorage.getItem("access-token") == null ? false : true
         }
@@ -132,14 +134,19 @@ class Header extends Component {
         this.setState({ loginPassword: e.target.value });
     }
 
-    registerClickHandler = () => {
+    signupClickHandler = () => {
         const mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        const phoneno = /^\d{10}$/;
+        const passwordFormat = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
         this.state.firstname === "" ? this.setState({ firstnameRequired: "dispBlock" }) : this.setState({ firstnameRequired: "dispNone" });
         this.state.lastname === "" ? this.setState({ lastnameRequired: "dispBlock" }) : this.setState({ lastnameRequired: "dispNone" });
         this.state.email === "" ? this.setState({ emailRequired: "dispBlock" }) : this.setState({ emailRequired: "dispNone" });
         this.state.email !== ""  && !this.state.email.match(mailformat)? this.setState({ invalidEmail: "dispBlock" }) : this.setState({ invalidEmail: "dispNone" });
         this.state.registerPassword === "" ? this.setState({ registerPasswordRequired: "dispBlock" }) : this.setState({ registerPasswordRequired: "dispNone" });
+        this.state.registerPassword !== "" && !this.state.registerPassword.match(passwordFormat) ? this.setState({ invalidPassword: "dispBlock" }) : this.setState({ invalidPassword: "dispNone" });
         this.state.contact === "" ? this.setState({ contactRequired: "dispBlock" }) : this.setState({ contactRequired: "dispNone" });
+        this.state.contact !== "" && !this.state.contact.match(phoneno)? this.setState({ invalidContactRequired: "dispBlock" }) : this.setState({ invalidContactRequired: "dispNone" });
+
         let dataSignup = JSON.stringify({
             "email_address": this.state.email,
             "first_name": this.state.firstname,
@@ -238,7 +245,7 @@ class Header extends Component {
                     style={customStyles}>
                     <Tabs className="tabs" value={this.state.value} onChange={this.tabChangeHandler}>
                         <Tab label="Login" />
-                        <Tab label="Register" />
+                        <Tab label="Signup" />
                     </Tabs>
                     {this.state.value === 0 &&
                     <TabContainer>
@@ -301,6 +308,9 @@ class Header extends Component {
                             <FormHelperText className={this.state.registerPasswordRequired}>
                                 <span className="red">required</span>
                             </FormHelperText>
+                            <FormHelperText className={this.state.invalidPassword}>
+                                <span className="red">Password must contain<br/> at least one capital letter,<br/> one small letter, <br/>one number, and <br/>one special character</span>
+                            </FormHelperText>
                         </FormControl>
                         <br/><br/>
                         <FormControl required>
@@ -310,10 +320,13 @@ class Header extends Component {
                             <FormHelperText className={this.state.contactRequired}>
                                 <span className="red">required</span>
                             </FormHelperText>
+                            <FormHelperText className={this.state.invalidContactRequired}>
+                                <span className="red">Contact No.<br/> must contain<br/> only numbers and <br/>must be 10 digits long</span>
+                            </FormHelperText>
                         </FormControl>
                         <br /><br />
                         <Button variant="contained" color="primary"
-                                onClick={this.registerClickHandler}>REGISTER</Button>
+                                onClick={this.signupClickHandler}>SIGNUP</Button>
                     </TabContainer>
                     }
 
