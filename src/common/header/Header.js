@@ -84,8 +84,11 @@ class Header extends Component {
             email: "",
             registerPasswordRequired: "dispNone",
             registerPassword: "",
+            invalidPassword: "dispNone",
             contactRequired: "dispNone",
-            contact: ""
+            contact: "",
+            invalidContactRequired: "dispNone",
+            registrationSuccess: false,
         });
     }
 
@@ -226,12 +229,14 @@ class Header extends Component {
                     {!this.state.loggedIn ?
                         <div className="login-button">
                             <Button variant="contained" color="default" onClick={this.openModalHandler}>
+                                <AccountCircleIcon/> &nbsp;
                                 Login
                             </Button>
                         </div>
                         :
                         <div className="login-button">
                             <Button variant="contained" color="default" onClick={this.logoutHandler}>
+                                <AccountCircleIcon/> &nbsp;
                                 Logout
                             </Button>
                         </div>
